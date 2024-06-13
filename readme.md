@@ -129,33 +129,3 @@ Obtiene todos los instrumentos disponibles.
 
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
 ```
-
-### package.json
-
-Para asegurarte de que los scripts mencionados en el `README.md` funcionen, asegúrate de que tu `package.json` tenga los siguientes scripts:
-
-{
-  "scripts": {
-    "build": "tsc",
-    "dev": "ts-node-dev src/index.ts",
-    "start": "node dist/index.js"
-  }
-}
-```
-
-### tsconfig.json
-
-Y asegúrate de tener un `tsconfig.json` configurado correctamente. Aquí tienes un ejemplo básico:
-{
-  "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
-}
-```
