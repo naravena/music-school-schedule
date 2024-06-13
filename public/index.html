@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clases de la Academia de Música</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="/add-student.html">Añadir Alumno</a>
+      <a href="/add-class.html">Añadir Clase</a>
+    </nav>
+    <div class="header">
+      <h1>Clases de la Academia de Música</h1>
+      <div id="current-week"></div>
+    </div>
+    <div class="nav">
+      <button onclick="navigateWeek(-1)">Semana Anterior</button>
+      <button onclick="navigateToCurrentWeek()">Semana Actual</button>
+      <button onclick="navigateWeek(1)">Semana Siguiente</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Lunes</th>
+          <th>Martes</th>
+          <th>Miércoles</th>
+          <th>Jueves</th>
+          <th>Viernes</th>
+          <th>Combo</th>
+          
+        </tr>
+      </thead>
+      <tbody id="schedule-body"></tbody>
+    </table>
+    <button onclick="copyToClipboard()">Copiar números al portapapeles</button>
+
+    <script src="schedule.js"></script>
+    <div id="update-modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Actualizar Aula</h2>
+        <form id="update-form" onsubmit="submitUpdate(event)">
+          <input type="hidden" id="update-alumno-id" />
+          <label for="update-alumno-nombre">Alumno:</label>
+          <input type="text" id="update-alumno-nombre" disabled />
+          <label for="update-aula">Aula:</label>
+          <select id="update-aula">
+            <option value="1">Aula 1</option>
+            <option value="2">Aula 2</option>
+            <option value="3">Aula 3</option>
+          </select>
+          <button type="submit">Actualizar</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

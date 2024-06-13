@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Añadir Clase</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css" />
+    <link rel="stylesheet" href="styles.css" />
+
+  </head>
+  <body>
+    <nav>
+      <a href="/index.html">Inicio</a>
+      <a href="/add-student.html">Añadir Alumno</a>
+    </nav>
+    <h1>Añadir Clase</h1>
+    <form id="add-class-form">
+      <label for="student">Alumno:</label>
+      <input type="text" id="student-search" placeholder="Buscar alumno..." />
+      <select id="student" name="student" required></select>
+      <label for="classroom">Aula:</label>
+      <select id="classroom" name="classroom" required></select>
+      <label for="date">Fecha:</label>
+      <input type="date" id="date" name="date" required />
+      <label for="time">Hora:</label>
+      <select id="time" name="time" required>
+        <option value="16:00">16:00 - 17:00</option>
+        <option value="17:00">17:00 - 18:00</option>
+        <option value="18:00">18:00 - 19:00</option>
+        <option value="19:00">19:00 - 20:00</option>
+        <option value="20:00">20:00 - 21:00</option>
+      </select>
+      <button type="submit">Añadir</button>
+    </form>
+    <div id="message" style="display: none"></div>
+    <script src="/add-class.js"></script>
+  </body>
+</html>
