@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
-import { db } from './db';
-import { QUERIES } from './queries';
-import { getCurrentWeek } from './utils';
+import { db } from '../src/db';
+import { QUERIES } from '../src/queries';
+import { getCurrentWeek } from '../src/utils';
 
 const app = express();
 
@@ -168,11 +168,6 @@ app.get('/instruments', async (req: Request, res: Response) => {
     console.error('[ERROR] Error al obtener instrumentos:', (err as Error).message);
     res.status(500).send('Error interno del servidor');
   }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`[INIT] Servidor corriendo en http://localhost:${PORT}`);
 });
 
 export default app;
