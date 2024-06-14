@@ -118,13 +118,14 @@ function drop(event) {
   const doc = parser.parseFromString(data, "text/html");
   const phoneNumber = doc.querySelector("#student-phone").textContent;
   let cellText = event.target.textContent;
-  let phoneNumbers = cellText ? cellText.split(", ") : [];
+  let phoneNumbers = cellText ? cellText.split("\n") : [];
 
   if (!phoneNumbers.includes(phoneNumber)) {
     phoneNumbers.push(phoneNumber);
-    event.target.textContent = phoneNumbers.join(", ");
+    event.target.textContent = phoneNumbers.join("\n");
   }
 }
+
 
 function copyToClipboard() {
   const comboCells = document.querySelectorAll("#combo-cell");
@@ -132,7 +133,7 @@ function copyToClipboard() {
 
   comboCells.forEach((cell) => {
     const phoneNumbers = cell.textContent
-      .split(", ")
+      .split("\n")
       .filter((number) => number !== "");
     allNumbers = allNumbers.concat(phoneNumbers);
   });
