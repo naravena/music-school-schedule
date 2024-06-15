@@ -1,37 +1,102 @@
+/* Archivo: style.css */
+
+/* Estilos generales */
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0 50px;
-  padding: 0;
-  min-height: 100vh;
+  margin: 0;
+  padding: 0 20px; /* Ajustado para mejor visualización en escritorio */
+  min-height: 100;
+  font-size: 16px; /* Ajuste del tamaño de fuente para escritorio */
 }
 
 table {
-  width: 80%;
+  width: 100%; /* Ajuste para mejor visualización en escritorio */
   border-collapse: collapse;
-  /*table-layout: auto;  Permite que el navegador ajuste automáticamente el tamaño de las celdas */
+  table-layout: auto; /* Ajuste para que las celdas se ajusten automáticamente */
 }
-th,
-td {
+th, td {
   border: 1px solid #ddd;
-  padding: 16px;
+  padding: 8px; /* Ajuste del padding para mejor visualización en escritorio */
   text-align: left;
-  white-space: nowrap;
+  word-wrap: break-word; /* Permite que el contenido se ajuste */
 }
 th {
   background-color: #f2f2f2;
 }
-.header,
-.nav {
+.header, .nav {
   width: 100%;
   text-align: center;
   margin-bottom: 16px;
 }
 .nav button {
-  margin: 0 4px;
+  margin: 4px; /* Ajuste del margen para mejor visualización en escritorio */
+  padding: 8px; /* Ajuste del padding para mejor visualización en escritorio */
+  font-size: 16px; /* Ajuste del tamaño de fuente para botones */
 }
+
+/* Estilos específicos para móviles */
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 12px; /* Ajuste adicional del tamaño de fuente para móviles */
+  }
+
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    margin: 0 0 1rem 0;
+  }
+
+  tr:nth-child(odd) {
+    background: #f2f2f2;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  td:before {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-weight: bold;
+  }
+
+  td:nth-of-type(1):before { content: "Hora"; }
+  td:nth-of-type(2):before { content: "Lunes"; }
+  td:nth-of-type(3):before { content: "Martes"; }
+  td:nth-of-type(4):before { content: "Miércoles"; }
+  td:nth-of-type(5):before { content: "Jueves"; }
+  td:nth-of-type(6):before { content: "Viernes"; }
+  td:nth-of-type(7):before { content: "Combo"; }
+
+  .nav button {
+    width: 100%;
+    margin: 4px 0;
+  }
+
+  #combo-cell {
+    width: auto;
+    min-width: auto;
+    max-width: none;
+  }
+}
+
 /* Modal */
 .modal {
   display: none;
@@ -51,7 +116,8 @@ th {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 40%;
+  width: 80%; /* Ajustado para móviles */
+  max-width: 400px; /* Máximo ancho */
   text-align: center;
 }
 
@@ -68,6 +134,7 @@ th {
   text-decoration: none;
   cursor: pointer;
 }
+
 nav {
   padding: 10px;
 }
@@ -75,7 +142,8 @@ nav {
 nav a {
   color: #fff;
   text-decoration: none;
-  margin-right: 20px;
+  margin-right: 10px; /* Ajustado para mejor visualización en escritorio */
+  font-size: 16px; /* Ajuste del tamaño de fuente para enlaces */
 }
 
 nav a:hover {
@@ -83,9 +151,6 @@ nav a:hover {
 }
 
 #combo-cell {
-  width: 150px;
-  min-width: 160px;
-  max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: pre-wrap;
