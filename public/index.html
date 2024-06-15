@@ -8,10 +8,6 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <nav>
-      <a href="/add-student.html">Añadir Alumno</a>
-      <a href="/add-class.html">Añadir Clase</a>
-    </nav>
     <div class="header">
       <h1>Clases de la Academia de Música</h1>
       <div id="current-week"></div>
@@ -21,6 +17,10 @@
       <button onclick="navigateToCurrentWeek()">Semana Actual</button>
       <button onclick="navigateWeek(1)">Semana Siguiente</button>
     </div>
+    <nav>
+      <a href="/add-student.html">Añadir Alumno</a>
+      <a href="/add-class.html">Añadir Clase</a>
+    </nav>
     <table>
       <thead>
         <tr>
@@ -31,11 +31,11 @@
           <th>Jueves</th>
           <th>Viernes</th>
           <th>Combo</th>
-          
         </tr>
       </thead>
       <tbody id="schedule-body"></tbody>
     </table>
+    <div id="mobile-dropdowns"></div>
     <button onclick="copyToClipboard()">Copiar números al portapapeles</button>
 
     <script src="schedule.js"></script>

@@ -8,7 +8,7 @@ body {
   justify-content: center;
   margin: 0;
   padding: 0 20px; /* Ajustado para mejor visualización en escritorio */
-  min-height: 100;
+  min-height: 100vh;
   font-size: 16px; /* Ajuste del tamaño de fuente para escritorio */
 }
 
@@ -39,61 +39,27 @@ th {
 
 /* Estilos específicos para móviles */
 @media screen and (max-width: 768px) {
-  body {
-    font-size: 12px; /* Ajuste adicional del tamaño de fuente para móviles */
-  }
-
   table, thead, tbody, th, td, tr {
+    display: none;
+  }
+
+  #mobile-dropdowns {
     display: block;
+    width: 100%;
   }
 
-  thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
+  details {
+    margin-bottom: 1rem;
   }
 
-  tr {
-    margin: 0 0 1rem 0;
-  }
-
-  tr:nth-child(odd) {
-    background: #f2f2f2;
-  }
-
-  td {
-    border: none;
-    border-bottom: 1px solid #eee;
-    position: relative;
-    padding-left: 50%;
-  }
-
-  td:before {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    white-space: nowrap;
+  summary {
+    font-size: 1.2rem;
     font-weight: bold;
   }
 
-  td:nth-of-type(1):before { content: "Hora"; }
-  td:nth-of-type(2):before { content: "Lunes"; }
-  td:nth-of-type(3):before { content: "Martes"; }
-  td:nth-of-type(4):before { content: "Miércoles"; }
-  td:nth-of-type(5):before { content: "Jueves"; }
-  td:nth-of-type(6):before { content: "Viernes"; }
-  td:nth-of-type(7):before { content: "Combo"; }
-
-  .nav button {
-    width: 100%;
-    margin: 4px 0;
-  }
-
-  #combo-cell {
-    width: auto;
-    min-width: auto;
-    max-width: none;
+  .classInfo {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
   }
 }
 

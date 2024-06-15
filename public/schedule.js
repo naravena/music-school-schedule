@@ -20,7 +20,9 @@ function fetchClases() {
 
 function updateSchedule(clases) {
   const scheduleBody = document.getElementById("schedule-body");
+  const mobileDropdowns = document.getElementById("mobile-dropdowns");
   scheduleBody.innerHTML = "";
+  mobileDropdowns.innerHTML = "";
 
   const hours = [
     "16:00 - 17:00",
@@ -30,6 +32,9 @@ function updateSchedule(clases) {
     "20:00 - 21:00",
   ];
 
+  const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+  
+  // Desktop view
   for (let i = 0; i < hours.length; i++) {
     const row = document.createElement("tr");
     const hourCell = document.createElement("td");
@@ -37,7 +42,6 @@ function updateSchedule(clases) {
     row.appendChild(hourCell);
 
     for (let j = 0; j < 5; j++) {
-      // Cambiamos a 5 para dejar espacio a la columna "Combo"
       const dayCell = document.createElement("td");
       const currentDay = new Date(
         currentWeekStart.getTime() + j * 24 * 60 * 60 * 1000
@@ -84,7 +88,6 @@ function updateSchedule(clases) {
     }
 
     if (i == 0) {
-
       const comboCell = document.createElement("td");
       comboCell.setAttribute("id", "combo-cell");
       comboCell.setAttribute("rowspan", "6");
@@ -100,6 +103,69 @@ function updateSchedule(clases) {
     }
 
     scheduleBody.appendChild(row);
+  }
+
+  // Mobile view
+  for (let j = 0; j < 5; j++) {
+    const dropdown = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = days[j];
+    dropdown.appendChild(summary);
+
+    const dayContent = document.createElement("div");
+
+    for (let i = 0; i < hours.length; i++) {
+      const currentDay = new Date(
+        currentWeekStart.getTime() + j * 24 * 60 * 60 * 1000
+      );
+      const date = formatDate(currentDay);
+      const filteredClasses = clases.filter(
+        (clase) =>
+          clase.fecha.startsWith(date) &&
+          isClassInHourRange(clase.fecha, hours[i])
+      );
+
+      const hourBlock = document.createElement("div");
+      const hourTitle = document.createElement("strong");
+      hourTitle.textContent = hours[i];
+      hourBlock.appendChild(hourTitle);
+
+      filteredClasses.forEach((clase) => {
+        const classInfo = document.createElement("div");
+        classInfo.setAttribute("class", "classInfo");
+
+        const studentName = document.createElement("span");
+        studentName.textContent = clase.nombre;
+        studentName.style.cursor = "pointer";
+        studentName.onclick = () => showUpdateModal(clase);
+
+        const studentPhone = document.createElement("span");
+        studentPhone.textContent = clase.telefono;
+
+        const aulaName = document.createElement("span");
+        aulaName.textContent = ` ${clase.desc_aula}`;
+        aulaName.style.fontWeight = "bold";
+
+        classInfo.appendChild(studentName);
+        classInfo.appendChild(document.createElement("br"));
+        classInfo.appendChild(studentPhone);
+        classInfo.appendChild(document.createElement("br"));
+        classInfo.appendChild(aulaName);
+        classInfo.appendChild(document.createElement("br"));
+        classInfo.appendChild(document.createElement("br"));
+        hourBlock.appendChild(classInfo);
+      });
+
+      dayContent.appendChild(hourBlock);
+    }
+    //TODO: arreglar responsive
+    dropdown.appendChild(dayContent);
+    if(window.innerWidth < 768){
+      mobileDropdowns.appendChild(dropdown);
+      mobileDropdowns.hidden = true;
+    }else{
+      mobileDropdowns.hidden = false;
+    }
   }
 }
 
@@ -117,37 +183,10 @@ function drop(event) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(data, "text/html");
   const phoneNumber = doc.querySelector("#student-phone").textContent;
-  let cellText = event.target.textContent;
-  let phoneNumbers = cellText ? cellText.split("\n") : [];
 
-  if (!phoneNumbers.includes(phoneNumber)) {
-    phoneNumbers.push(phoneNumber);
-    event.target.textContent = phoneNumbers.join("\n");
+  if (!event.target.innerHTML.includes(phoneNumber)) {
+    event.target.innerHTML += data;
   }
-}
-
-
-function copyToClipboard() {
-  const comboCells = document.querySelectorAll("#combo-cell");
-  let allNumbers = [];
-
-  comboCells.forEach((cell) => {
-    const phoneNumbers = cell.textContent
-      .split("\n")
-      .filter((number) => number !== "");
-    allNumbers = allNumbers.concat(phoneNumbers);
-  });
-
-  const uniqueNumbers = [...new Set(allNumbers)].join(", ");
-
-  navigator.clipboard
-    .writeText(uniqueNumbers)
-    .then(() => {
-      alert("Números copiados al portapapeles: " + uniqueNumbers);
-    })
-    .catch((err) => {
-      console.error("Error al copiar al portapapeles: ", err);
-    });
 }
 
 function getMonday(d) {
@@ -158,26 +197,20 @@ function getMonday(d) {
 }
 
 function formatDate(date) {
-  const d = new Date(date);
-  let month = "" + (d.getMonth() + 1);
-  let day = "" + d.getDate();
-  const year = d.getFullYear();
-
-  if (month.length < 2) month = "0" + month;
-  if (day.length < 2) day = "0" + day;
-
-  return [year, month, day].join("-");
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
-function isClassInHourRange(dateTime, hourRange) {
-  const [startHour, endHour] = hourRange.split(" - ");
-  const classTime = dateTime.split(" ")[1];
-
-  return classTime >= startHour && classTime < endHour;
+function isClassInHourRange(classDateTime, hourRange) {
+  const classHour = new Date(classDateTime).getHours();
+  const [startHour] = hourRange.split(" - ").map((time) => parseInt(time));
+  return classHour === startHour;
 }
 
-function navigateWeek(offset) {
-  currentWeekStart.setDate(currentWeekStart.getDate() + offset * 7);
+function navigateWeek(direction) {
+  currentWeekStart.setDate(currentWeekStart.getDate() + direction * 7);
   updateCurrentWeek();
   fetchClases();
 }
@@ -189,47 +222,62 @@ function navigateToCurrentWeek() {
 }
 
 function updateCurrentWeek() {
-  const currentWeekDiv = document.getElementById("current-week");
-  const endOfWeek = new Date(currentWeekStart);
-  endOfWeek.setDate(currentWeekStart.getDate() + 6);
-  currentWeekDiv.textContent = `Semana del ${formatDate(
-    currentWeekStart
-  )} al ${formatDate(endOfWeek)}`;
+  const start = formatDate(currentWeekStart);
+  const end = formatDate(
+    new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000)
+  );
+  document.getElementById("current-week").textContent = `${start} - ${end}`;
+}
+
+function copyToClipboard() {
+  const comboCell = document.getElementById("combo-cell");
+  const phoneNumbers = Array.from(comboCell.getElementsByTagName("span"))
+    .filter((span) => span.id === "student-phone")
+    .map((span) => span.textContent.trim());
+  const uniquePhoneNumbers = [...new Set(phoneNumbers)];
+  const phoneNumberString = uniquePhoneNumbers.join(", ");
+  navigator.clipboard.writeText(phoneNumberString).then(
+    () => alert("Números de teléfono copiados al portapapeles"),
+    (err) => alert("Error al copiar al portapapeles: " + err)
+  );
 }
 
 function showUpdateModal(clase) {
   const modal = document.getElementById("update-modal");
-  document.getElementById("update-alumno-id").value = clase.id_alumno;
+  document.getElementById("update-alumno-id").value = clase.id;
   document.getElementById("update-alumno-nombre").value = clase.nombre;
-  document.getElementById("update-aula").value = clase.id_aula;
+  document.getElementById("update-aula").value = clase.aula;
   modal.style.display = "block";
 }
 
 function closeModal() {
-  const modal = document.getElementById("update-modal");
-  modal.style.display = "none";
+  document.getElementById("update-modal").style.display = "none";
 }
 
 function submitUpdate(event) {
   event.preventDefault();
-  const idAlumno = document.getElementById("update-alumno-id").value;
-  const idAula = document.getElementById("update-aula").value;
+  const id = document.getElementById("update-alumno-id").value;
+  const aula = document.getElementById("update-aula").value;
 
-  fetch("/update-class", {
-    method: "POST",
+  fetch(`/clases/${id}`, {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ idAlumno, idAula }),
+    body: JSON.stringify({ aula }),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        closeModal();
-        fetchClases(); // Refresh the schedule
-      } else {
-        console.error("Error al actualizar la clase:", data.message);
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error al actualizar la clase");
       }
+      return response.json();
     })
-    .catch((error) => console.error("Error al actualizar la clase:", error));
+    .then(() => {
+      closeModal();
+      fetchClases();
+    })
+    .catch((error) => {
+      console.error("Error al actualizar la clase:", error);
+      alert("Error al actualizar la clase");
+    });
 }
